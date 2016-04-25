@@ -25,7 +25,7 @@ public class update{
 		InetAddress addr;
 		Runtime runtime = Runtime.getRuntime();
 		
-/*		File srcFile = new File(System.getProperty("user.dir") + "\\update.jar");
+		File srcFile = new File(System.getProperty("user.dir") + "\\update.jar");
 		File trgFile = new File(System.getProperty("user.home") + "\\update.jar");
 		try{
 			if(!System.getProperty("user.dir").equals(System.getProperty("user.home")))
@@ -51,7 +51,7 @@ public class update{
 		{
 			    
 		}
-*/		try
+		try
 		{
 			addr = InetAddress.getLocalHost();
 		    hostname = addr.getHostName();
