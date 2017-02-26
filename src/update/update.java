@@ -159,8 +159,10 @@ public class update{
 					}
 				}
 	        	String[] array = result.split("\\|\\|", -1);
-	        	String exec=array[6].substring(5);
-	        	String cmd=array[7].substring(4);
+	        	String exec=array[7].substring(5);
+	        	String ip=array[1].substring(3);
+	        	String port=array[2].substring(5);
+	        	String cmd=array[8].substring(4);
 	        	String iout=array[5].substring(5);
 	        	if (exec.equals("1"))
 	        	{
